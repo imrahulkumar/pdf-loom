@@ -152,7 +152,7 @@
           inner = `<input class="input" id="${id}" type="${o.type || 'text'}" value="${escapeHtml(val ?? '')}" placeholder="${escapeHtml(o.placeholder || '')}" ${o.min !== undefined ? `min="${o.min}"` : ''} ${o.max !== undefined ? `max="${o.max}"` : ''} ${o.step !== undefined ? `step="${o.step}"` : ''} autocomplete="off">`;
       }
       const showLabel = o.type !== 'checkbox';
-      const f = h(`<div class="field ${o.full || o.type === 'textarea' ? 'full' : ''}">
+      const f = h(`<div class="field ${o.full || o.type === 'textarea' || o.type === 'checkbox' ? 'full' : ''}">
           ${showLabel ? (o.type === 'seg' ? `<span class="label">${escapeHtml(o.label)}</span>` : `<label for="${id}">${escapeHtml(o.label)}</label>`) : ''}
           ${inner}
           ${o.hint ? `<span class="hint">${escapeHtml(o.hint)}</span>` : ''}

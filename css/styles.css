@@ -170,7 +170,7 @@ textarea.input { min-height: 120px; resize: vertical; font-family: var(--mono); 
 .input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 input[type="color"].input { padding: 3px; height: 40px; cursor: pointer; }
 input[type="range"] { accent-color: var(--accent); width: 100%; }
-.check { display: flex; align-items: center; gap: 9px; font-weight: 500; font-size: 14px; cursor: pointer; }
+.check, .field > label.check { display: flex; align-items: center; gap: 9px; font-weight: 500; font-size: 14px; cursor: pointer; }
 .check input { accent-color: var(--accent); width: 17px; height: 17px; }
 .seg { display: flex; flex-wrap: wrap; gap: 6px; }
 .seg label { cursor: pointer; }
@@ -271,11 +271,11 @@ input[type="range"] { accent-color: var(--accent); width: 100%; }
 .doc-render { font-family: Georgia, "Times New Roman", serif; color: #111; font-size: 12pt; line-height: 1.55; background: #fff; }
 .doc-render h1, .doc-render h2, .doc-render h3 { font-family: Helvetica, Arial, sans-serif; margin: 1em 0 .4em; line-height: 1.25; }
 .doc-render p { margin: 0 0 .8em; }
-.doc-render table { border-collapse: collapse; width: 100%; margin: .6em 0; font-family: Helvetica, Arial, sans-serif; font-size: 9.5pt; }
-.doc-render th, .doc-render td { border: 1px solid #bbb; padding: 4px 6px; text-align: left; vertical-align: top; }
+.doc-render table { border-collapse: collapse; width: 100%; margin: .6em 0; font-family: Helvetica, Arial, sans-serif; font-size: .8em; }
+.doc-render th, .doc-render td { border: 1px solid #bbb; padding: .3em .5em; text-align: left; vertical-align: top; }
 .doc-render th { background: #f1f1f1; }
 .doc-render img { max-width: 100%; }
-.doc-render pre { background: #f4f4f4; padding: 10px; border-radius: 4px; white-space: pre-wrap; font-size: 10pt; }
+.doc-render pre { background: #f4f4f4; padding: 10px; border-radius: 4px; white-space: pre-wrap; font-size: .85em; }
 .doc-render code { font-family: Menlo, Consolas, monospace; font-size: .92em; background: #f4f4f4; padding: 0 3px; border-radius: 3px; }
 .doc-render blockquote { border-left: 3px solid #ccc; margin: 0 0 .8em; padding-left: 12px; color: #444; }
 

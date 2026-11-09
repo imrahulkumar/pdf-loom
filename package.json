@@ -1,0 +1,9 @@
+{
+  "name": "pdfloom",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Free PDF tools that run entirely in the browser. No uploads, no build step.",
+  "scripts": {
+    "start": "npx --yes serve@14.2.4 -l 8080 ."
+  }
+}

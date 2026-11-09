@@ -397,22 +397,31 @@ window.App = window.App || {};
   /**
    * Render HTML into a PDF Blob via html2pdf (html2canvas + jsPDF).
    * Content is measured and rendered in chunks, then merged, so long documents don't exceed
-   * browser canvas size limits. `fitWidth` widens the layout for wide tables (scaled to the page).
+   * browser canvas size limits. `fitWidth` shrinks the text so wide tables fit the page width.
    */
+  const PAPER_MM = { a3: [297, 420], a4: [210, 297], a5: [148, 210], letter: [215.9, 279.4], legal: [215.9, 355.6] };
   async function htmlToPdfBlob(html, { format = 'a4', orientation = 'portrait', margin = 12, progress, fitWidth = false } = {}) {
     const html2pdf = await lib.html2pdf();
     const { PDFDocument } = await lib.pdflib();
     progress && progress(null, 'Laying out pages…');
-    const baseW = orientation === 'landscape' ? 1050 : 720;
+    const paper = PAPER_MM[format] || PAPER_MM.a4;
+    const pageWmm = orientation === 'landscape' ? paper[1] : paper[0];
+    // html2pdf lays content out at the page's inner width (CSS mm), so measure at exactly that width
+    const width = Math.floor(((pageWmm - 2 * margin) * 96) / 25.4);
     const host = document.createElement('div');
     host.className = 'doc-render';
-    host.style.cssText = `position:absolute;left:-100000px;top:0;width:${baseW}px;`;
+    host.style.cssText = `position:absolute;left:-100000px;top:0;width:${width}px;`;
     if (typeof html === 'string') host.innerHTML = html; else host.appendChild(html);
     document.body.appendChild(host);
     try {
       await Promise.all([...host.querySelectorAll('img')].map((img) => (img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; }))));
-      let width = baseW;
-      if (fitWidth) { width = Math.min(4000, Math.max(baseW, host.scrollWidth)); host.style.width = width + 'px'; }
+      let fontPt = 12;
+      if (fitWidth) {
+        for (let k = 0; k < 4 && host.scrollWidth > width + 1 && fontPt > 4; k++) {
+          fontPt = Math.max(4, fontPt * (width / host.scrollWidth) * 0.98);
+          host.style.fontSize = fontPt + 'pt';
+        }
+      }
       const styles = [...host.querySelectorAll('style')];
       styles.forEach((s) => s.remove());
       // wrap stray text nodes so every top-level node can be measured
@@ -420,8 +429,8 @@ window.App = window.App || {};
         if (n.nodeType === 3 && n.textContent.trim()) { const p = document.createElement('p'); n.replaceWith(p); p.appendChild(n); }
         else if (n.nodeType !== 1) n.remove();
       }
-      const scale = isMobile ? 1.5 : 2;
-      const maxChunk = (isMobile ? 5000 : 9000) * (baseW / width);
+      const scale = isMobile ? 1.4 : 1.7;
+      const maxChunk = isMobile ? 5000 : 9000;
       const chunks = [];
       let cur = []; let curH = 0;
       for (const el of [...host.children]) {
@@ -435,24 +444,29 @@ window.App = window.App || {};
       if (!chunks.length) throw new UserError('There is no content to convert.');
       host.remove();
       const merged = await PDFDocument.create();
+      // html2canvas mis-positions content when the window is scrolled, so render from the top
+      const scrollPos = [window.scrollX, window.scrollY];
+      window.scrollTo(0, 0);
+      try {
       for (let i = 0; i < chunks.length; i++) {
         progress && progress(i / chunks.length, `Rendering part ${i + 1} of ${chunks.length}…`);
         const box = document.createElement('div');
         box.className = 'doc-render';
-        box.style.width = width + 'px';
+        box.style.fontSize = fontPt + 'pt';
         styles.forEach((s) => box.appendChild(s.cloneNode(true)));
         chunks[i].els.forEach((el) => box.appendChild(el));
         const h = chunks[i].h;
         const ab = await html2pdf().set({
           margin,
-          image: { type: 'jpeg', quality: 0.95 },
-          html2canvas: { scale: Math.min(scale, 30000 / Math.max(1, h * 1.2)), useCORS: true, backgroundColor: '#ffffff', logging: false },
+          image: { type: 'jpeg', quality: 0.85 },
+          html2canvas: { scale: Math.min(scale, 30000 / Math.max(1, h * 1.2)), useCORS: true, backgroundColor: '#ffffff', logging: false, scrollX: 0, scrollY: 0 },
           jsPDF: { unit: 'mm', format, orientation },
-          pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', 'img', 'h1', 'h2', 'h3', 'li'] },
+          pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', 'img', 'h1', 'h2', 'h3', 'li', 'p', 'pre', 'blockquote'] },
         }).from(box).outputPdf('arraybuffer');
         const part = await PDFDocument.load(ab);
         (await merged.copyPages(part, part.getPageIndices())).forEach((p) => merged.addPage(p));
       }
+      } finally { window.scrollTo(scrollPos[0], scrollPos[1]); }
       return pdfBlob(await merged.save());
     } finally {
       host.remove();
