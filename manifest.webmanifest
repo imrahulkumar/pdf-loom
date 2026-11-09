@@ -1,0 +1,9 @@
+{
+  "name": "PDFLoom — PDF Tools",
+  "short_name": "PDFLoom",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F7F6F3",
+  "theme_color": "#E0433A",
+  "icons": [{ "src": "assets/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

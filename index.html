@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDFLoom — Free PDF Tools in Your Browser</title>
+  <meta name="description" content="Free online PDF tools that run entirely in your browser. Merge, split, compress, convert, edit, protect and more. No uploads, no watermark, no sign-up.">
+  <meta name="theme-color" content="#E0433A">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="logo" href="#/" aria-label="PDFLoom home">
+        <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><rect width="32" height="32" rx="8" fill="var(--accent)"/><path d="M10 8h8l5 5v11a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" fill="#fff"/><path d="M18 8v5h5" fill="none" stroke="var(--accent)" stroke-width="1.6"/><path d="M11.5 18h9M11.5 21.5h6" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span>PDF<b>Loom</b></span>
+      </a>
+      <nav class="main-nav" aria-label="Tool categories">
+        <a href="#/?cat=essentials">Essentials</a>
+        <a href="#/?cat=edit">Edit</a>
+        <a href="#/?cat=security">Security</a>
+        <a href="#/?cat=convert">Convert</a>
+        <a href="#/?cat=ai">Smart tools</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="app" class="wrap" tabindex="-1"></main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div>
+        <strong>PDFLoom</strong>
+        <p>Every tool runs locally in your browser with JavaScript and WebAssembly. Your files are never uploaded.</p>
+      </div>
+      <p class="muted small">Built with pdf-lib, PDF.js, JSZip, Tesseract.js and friends. Free and open source.</p>
+    </div>
+  </footer>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/lib.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/viewer.js"></script>
+  <script src="js/tools/essentials.js"></script>
+  <script src="js/tools/edit.js"></script>
+  <script src="js/tools/security.js"></script>
+  <script src="js/tools/convert.js"></script>
+  <script src="js/tools/smart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
