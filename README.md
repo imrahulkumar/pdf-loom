@@ -1,5 +1,7 @@
 # PDFLoom
 
+**Deployed at: [https://pdf-loom.vercel.app/](https://pdf-loom.vercel.app/)**
+
 39 free PDF tools that run entirely in the browser. Files are never uploaded. There's no backend and no build step: it's plain HTML, CSS and JavaScript, with libraries lazy-loaded from CDNs and cached for offline use.
 
 ## Run it
